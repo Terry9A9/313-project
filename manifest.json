@@ -1,0 +1,15 @@
+{
+    "short_name": "S313",
+    "name": "S313",
+    "icons": [
+        {
+            "src": "icons/logo.png",
+            "sizes": "192×192",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "http://127.0.0.1:5500/",
+    "background_color": "#000",
+    "theme_color": "#536878",
+    "display": "standalone"
+}

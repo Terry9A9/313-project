@@ -15,7 +15,8 @@
 	<script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap-select/1.13.6/js/bootstrap-select.js"></script>
-
+  <link rel="manifest" href="manifest.json">
+  <script src="service-worker.js"></script>
   <script src="app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -135,5 +136,18 @@
       </div>
     </div>
 </div>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    // Wait for the 'load' event to not block other work
+    window.addEventListener('load', async () => {
+        // Try to register the service worker.
+        try {
+            const reg = await navigator.serviceWorker.register('service-worker.js');
+            console.log('Service worker registered! 😎', reg);
+        } catch (err) {
+            console.log('😥 Service worker registration failed: ', err);
+        }
+    });
+}
+</script>
 </html>

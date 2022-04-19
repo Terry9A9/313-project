@@ -1,5 +1,5 @@
 //Init. the search option checkboxes
-function clearSearchOption(){
+function clearSearchOption() {
     $("#districtPicker").selectpicker('deselectAll');
     $("#schoolLevelPicker").selectpicker('deselectAll');
     $("#finTypePicker").selectpicker('deselectAll');
@@ -17,10 +17,10 @@ function initialize() {
         if (localStorage) {
             const schoolData = localStorage.getItem("schoolData");
             if (schoolData) {
-                    displayschoolData(JSON.parse(schoolData));
-                }
+                displayschoolData(JSON.parse(schoolData));
             }
-        } 
+        }
+    }
 
     document.getElementById("status").innerHTML = status;
 
@@ -30,19 +30,19 @@ function initialize() {
             document.getElementById("status").innerHTML = "Online";
         },
         false
-        );
+    );
     document.body.addEventListener(
         "offline",
         function () {
             document.getElementById("status").innerHTML = "Offline";
         },
         false
-        );
+    );
 }
 
 function retrieveschoolData() {
     const xhr = new XMLHttpRequest();
-    const url = "schoolData.json";
+    const url = "schoolData11.json";
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -80,21 +80,21 @@ function addRow(data) {
 
     nameCell.setAttribute('data-label', "School Name");
     nameCell.innerHTML = data.E;
-    
+
     districtCell.setAttribute('data-label', "School District");
     districtCell.innerHTML = data.U;
-    
+
     ftCell.setAttribute('data-label', "School Finicial Type");
     ftCell.innerHTML = data.W;
-    
+
     genderCell.setAttribute('data-label', "students Gender");
     genderCell.innerHTML = data.Q;
 
     webpCell.setAttribute('data-label', "School Webpage");
-    webpCell.innerHTML = "<a href='"+data.AE+"'>網頁</a>";       
+    webpCell.innerHTML = "<a href='" + data.AE + "'>網頁</a>";
 }
 
-function filter(data){
+function filter(data) {
     //To get the pickers value to do filtering
     var dpval = $("#districtPicker").val();
     var slpval = $("#schoolLevelPicker").val();
@@ -102,19 +102,19 @@ function filter(data){
     var rpval = $("#religionPicker").val();
 
     console.log(`Picker Value: ${dpval},${slpval},${ftpval},${rpval}`);
- 
+
     //filter
     var filteredResult = Object.values(data).filter(
         schoolData =>
-        schoolData.U == dpval &&
-        schoolData.Y == slpval &&
-        schoolData.W == ftpval &&
-        schoolData.AG == rpval
+            schoolData.U == dpval &&
+            schoolData.Y == slpval &&
+            schoolData.W == ftpval &&
+            schoolData.AG == rpval
     );
 
     console.log(`length: ${filteredResult.length}`);
 
-    if (filteredResult.length !== 0){
+    if (filteredResult.length !== 0) {
         //show filtered list
         document.getElementById("filteredTable").classList.remove("d-none");
         //hide original list
@@ -125,7 +125,7 @@ function filter(data){
         //to clear the filter result list
         $("#filteredTable tr").remove();
 
-        for (var i = 0; i < filteredResult.length; i++){
+        for (var i = 0; i < filteredResult.length; i++) {
             console.log(`${i}th result:
             ${filteredResult[i].Y},
             ${filteredResult[i].E},            
@@ -145,33 +145,33 @@ function filter(data){
 
             levelCell.setAttribute('data-label', "School Level");
             levelCell.innerHTML = filteredResult[i].Y;
-    
+
             nameCell.setAttribute('data-label', "School Name");
             nameCell.innerHTML = filteredResult[i].E;
-        
+
             districtCell.setAttribute('data-label', "School District");
             districtCell.innerHTML = filteredResult[i].U;
-        
+
             ftCell.setAttribute('data-label', "School Finicial Type");
             ftCell.innerHTML = filteredResult[i].W;
 
             genderCell.setAttribute('data-label', "Students Gender");
             genderCell.innerHTML = filteredResult[i].Q;
-        
+
             webpCell.setAttribute('data-label', "School Webpage");
-            webpCell.innerHTML = "<a href='"+filteredResult[i].AE+"'>網頁</a>";  
+            webpCell.innerHTML = "<a href='" + filteredResult[i].AE + "'>網頁</a>";
         }
-    }else{
+    } else {
         //If No result found, show the original list and show message
         document.getElementById("originalTable").classList.remove("d-none");
         document.getElementById("filteredTable").classList.add("d-none");
 
         document.getElementById("status").innerHTML = "NO RESULT FOUND!!! Now showing the full list";
-    } 
+    }
 }
 
 //To get the data and do the filtering
-function getData(){
+function getData() {
     const localStorage = window.localStorage;
     if (localStorage) {
         const schoolData = localStorage.getItem("schoolData");
@@ -183,28 +183,28 @@ function getData(){
 }
 
 
-$(document).ready(function(){
+$(document).ready(function () {
     //SearchBar function
-    $("#myInput").on("keyup", function() {
+    $("#myInput").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#originalTable tr").filter(function() {
+        $("#originalTable tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
-        $("#filteredTable tr").filter(function() {
+        $("#filteredTable tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
 
     //Back to top button
-    $(window).scroll(function(){ 
-        if ($(this).scrollTop() > 100) { 
-            $('#scroll').fadeIn(); 
-        } else { 
-            $('#scroll').fadeOut(); 
-        } 
-    }); 
-    $('#scroll').click(function(){ 
-        $("html, body").animate({ scrollTop: 0 }, 600); 
-        return false; 
-    }); 
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('#scroll').fadeIn();
+        } else {
+            $('#scroll').fadeOut();
+        }
+    });
+    $('#scroll').click(function () {
+        $("html, body").animate({ scrollTop: 0 }, 600);
+        return false;
+    });
 });
