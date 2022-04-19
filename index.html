@@ -16,6 +16,7 @@
 	<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap-select/1.13.6/js/bootstrap-select.js"></script>
   <link rel="manifest" href="manifest.json">
+  <link rel="canonical" href="https://terry9a9.github.io/313-project/" />
   <script src="service-worker.js"></script>
   <script src="app.js"></script>
   <link rel="stylesheet" href="style.css">
@@ -142,7 +143,7 @@
     window.addEventListener('load', async () => {
         // Try to register the service worker.
         try {
-            const reg = await navigator.serviceWorker.register('./service-worker.js');
+            const reg = await navigator.serviceWorker.register('/313-project/service-worker.js',{scope: '/313-project/'});
             console.log('Service worker registered! 😎', reg);
         } catch (err) {
             console.log('😥 Service worker registration failed: ', err);
