@@ -8,7 +8,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "http://127.0.0.1:5500/",
+    "start_url": "https://terry9a9.github.io/313-project/",
     "background_color": "#000",
     "theme_color": "#536878",
     "display": "standalone"
