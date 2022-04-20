@@ -237,7 +237,7 @@ $(document).ready(function () {
     });  
 
     $('#originalTable').dataTable( {
-        "ajax": "schoolData11.json",
+        "ajax": "./schoolData11.json",
         "columns": [
             { data: 'Y', title: "學校類型"},
             { data: "E", title: "名稱"},
