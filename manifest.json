@@ -4,11 +4,11 @@
     "icons": [
         {
             "src": "icons/logo.png",
-            "sizes": "192×192",
+            "sizes": "192x192",
             "type": "image/png"
         }
     ],
-    "start_url": "https://terry9a9.github.io/313-project/",
+    "start_url": "https://terry9a9.github.io",
     "background_color": "#000",
     "theme_color": "#536878",
     "display": "standalone"
