@@ -59,6 +59,7 @@ function retrieveschoolData() {
 
     xhr.open("get", url);
     xhr.send();
+    
 }
 
 function displayschoolData(schoolData) {
@@ -92,6 +93,7 @@ function addRow(data) {
 
     webpCell.setAttribute('data-label', "School Webpage");
     webpCell.innerHTML = "<a href='" + data.AE + "'>網頁</a>";
+
 }
 
 function filter(data) {
@@ -182,7 +184,6 @@ function getData() {
     }
 }
 
-
 $(document).ready(function () {
     //SearchBar function
     $("#myInput").on("keyup", function () {
@@ -206,5 +207,49 @@ $(document).ready(function () {
     $('#scroll').click(function () {
         $("html, body").animate({ scrollTop: 0 }, 600);
         return false;
-    });
+    });    
+
+    var trigger = $('.hamburger'),
+        overlay = $('.overlay'),
+       isClosed = false;
+  
+      trigger.click(function () {
+        hamburger_cross();      
+      });
+  
+      function hamburger_cross() {
+  
+        if (isClosed == true) {          
+          overlay.hide();
+          trigger.removeClass('is-open');
+          trigger.addClass('is-closed');
+          isClosed = false;
+        } else {   
+          overlay.show();
+          trigger.removeClass('is-closed');
+          trigger.addClass('is-open');
+          isClosed = true;
+        }
+    }
+    
+    $('[data-toggle="offcanvas"]').click(function () {
+          $('#wrapper').toggleClass('toggled');
+    });  
+
+    $('#originalTable').dataTable( {
+        "ajax": "schoolData11.json",
+        "columns": [
+            { data: 'Y', title: "學校類型"},
+            { data: "E", title: "名稱"},
+            { data: "U", title: "分區"},
+            { data: "W", title: "資助種類"},
+            { data: "Q", title: "就讀學生性別"},
+        ],
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+        responsive: true,
+    } );
+
 });
+
