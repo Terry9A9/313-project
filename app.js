@@ -9,7 +9,7 @@ $(document).ready(function () {
         responsive: true,
         initComplete: function () {
 
-            var filter_cols = [1, 2, 3, 4,6,7]
+            var filter_cols = [1, 2, 3, 4, 6, 7]
             this.api().columns(filter_cols).every(function () {
                 var column = this;
                 var select = $('<select><option value=""></option></select>')
@@ -48,7 +48,7 @@ $(document).ready(function () {
                     });
                 });
             });
-        
+
         },
         "columns": [
             {
@@ -79,7 +79,7 @@ $(document).ready(function () {
             }
 
         ],
-        
-    }); 
+
+    });
 });
 
