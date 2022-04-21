@@ -1,17 +1,16 @@
 $(document).ready(function () {
 
-    var table = $('#originalTable').dataTable({
-        "ajax": "./schoolData11.json",
+    var table = $('#originalTable').DataTable({
+        "ajax": "/313-project/schoolData11.json",
         rowReorder: {
             selector: 'td:nth-child(2)'
         },
         rowReorder: false,
         responsive: true,
-
         initComplete: function () {
 
-            var cols = [1, 2, 3, 4]
-            this.api().columns(cols).every(function () {
+            var filter_cols = [1, 2, 3, 4,6,7]
+            this.api().columns(filter_cols).every(function () {
                 var column = this;
                 var select = $('<select><option value=""></option></select>')
                     .appendTo($(column.footer()).empty())
@@ -29,7 +28,7 @@ $(document).ready(function () {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            cols.forEach(col => {
+            filter_cols.forEach(col => {
                 this.api().columns(col).every(function () {
                     var column = this;
                     var select = $('<select><option value=""></option></select>')
@@ -59,6 +58,9 @@ $(document).ready(function () {
             { data: "W", title: "資助種類" },
             { data: "Q", title: "就讀性別" },
             { data: 'Y', title: "類型" },
+            { data: 'G', title: "地址" },
+            { data: 'S', title: "授課時間" },
+            { data: 'AG', title: "宗教" },
             {
                 data: "AE", title: "URL",
                 render: function (data, type) {
@@ -78,6 +80,6 @@ $(document).ready(function () {
 
         ],
         
-    });
+    }); 
 });
 
