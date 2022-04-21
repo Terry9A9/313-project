@@ -1,36 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Search For School</title>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-          <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-        <!--Handle the picker-->
-          <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.6/css/bootstrap-select.css" />
-          <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-          <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-          <script src="https://cdn.bootcss.com/bootstrap-select/1.13.6/js/bootstrap-select.js"></script>
-        <link rel="manifest" href="manifest.json">
-        <link rel="canonical" href="https://terry9a9.github.io/313-project/" />
-        <script src="service-worker.js"></script>
-        <script src="app.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/r-2.2.9/datatables.min.css"/>
- 
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/r-2.2.9/datatables.min.js"></script>
-        
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-        
-    </head>
-    <body>
-            <div id="page-content-wrapper">
-                <table class="table table-striped table-hover table-scroll" id="originalTable">
-                    <tbody id="tcontent">
-                    </tbody>
-                </table>
-            </div>
-    </body>
+<head>
+  <title>Search For School</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <!--Handle the picker-->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.6/css/bootstrap-select.css" />
+  <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap-select/1.13.6/js/bootstrap-select.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <link rel="canonical" href="https://terry9a9.github.io/313-project/" />
+  <script src="service-worker.js"></script>
+  <script src="app.js"></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.datatables.net/v/bs4/dt-1.11.5/r-2.2.9/rr-1.2.8/sb-1.3.2/datatables.min.css" />
+  <script type="text/javascript"
+    src="https://cdn.datatables.net/v/bs4/dt-1.11.5/r-2.2.9/rr-1.2.8/sb-1.3.2/datatables.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+    .mobile-filter {
+      display: none;
+    }
+
+    /* Smartphone Portrait and Landscape */
+    @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+      .mobile-filter {
+        display: inline;
+        padding: 100px;
+        text-align: center;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="datatable">
+    <div class="mobile-filter">
+      <div id="mobile-filter1">
+        分區:
+      </div>
+      <div id="mobile-filter2">
+        資助種類:
+      </div>
+      <div id="mobile-filter3">
+        就讀性別:
+      </div>
+      <div id="mobile-filter4">
+        類型:
+      </div>
+    </div>
+    <table class="table table-striped table-hover table-scroll" id="originalTable">
+      <thead>
+        <tr>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th>名稱</th>
+          <th>分區</th>
+          <th>資助種類</th>
+          <th>就讀性別</th>
+          <th>類型</th>
+          <th>URL</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</body>
+<script>
+  if ('serviceWorker' in navigator) {
+    // Wait for the 'load' event to not block other work
+    window.addEventListener('load', async () => {
+        // Try to register the service worker.
+        try {
+            const reg = await navigator.serviceWorker.register('/313-project/service-worker.js',{scope: '/313-project/'});
+            console.log('Service worker registered! 😎', reg);
+        } catch (err) {
+            console.log('😥 Service worker registration failed: ', err);
+        }
+    });
+}
+</script>
 </html>
-
