@@ -1,11 +1,8 @@
-
-
-
 $(document).ready(function () {
 
     function getData() {
         const xhr = new XMLHttpRequest();
-        const url = "schoolData.json";
+        const url = "https://www.edb.gov.hk/attachment/en/student-parents/sch-info/sch-search/sch-location-info/SCH_LOC_EDB.json";
 
         return new Promise(function (resolve, reject) {
             xhr.onreadystatechange = function () {
