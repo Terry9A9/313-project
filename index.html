@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" />
   <!--Handle the picker-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.6/css/bootstrap-select.css" />
   <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -17,7 +17,7 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="canonical" href="https://terry9a9.github.io/313-project/" />
-  <link rel="import" href="/schoolData11.json"/>
+  <link rel="import" href="/schoolData11.json" />
   <script src="service-worker.js"></script>
   <script src="app.js"></script>
 
@@ -44,6 +44,7 @@
   </style>
 
 </head>
+
 <body>
   <div id="datatable">
     <div class="mobile-filter">
@@ -91,18 +92,19 @@
   if ('serviceWorker' in navigator) {
     // Wait for the 'load' event to not block other work
     window.addEventListener('load', async () => {
-        // Try to register the service worker.
-        try {
-            //local test
-            //const reg = await navigator.serviceWorker.register('service-worker.js'); 
+      // Try to register the service worker.
+      try {
+        //local test
+        const reg = await navigator.serviceWorker.register('service-worker.js');
 
-            //deploy
-            const reg = await navigator.serviceWorker.register('/313-project/service-worker.js',{scope: '/313-project/'});
-            console.log('[Service worker] registered', reg);
-        } catch (err) {
-            console.log('[Service worker] registration failed: ', err);
-        }
+        //deploy
+        // const reg = await navigator.serviceWorker.register('/313-project/service-worker.js',{scope: '/313-project/'});
+        console.log('[Service worker] registered', reg);
+      } catch (err) {
+        console.log('[Service worker] registration failed: ', err);
+      }
     });
-}
+  }
 </script>
+
 </html>

@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     function getData() {
         const xhr = new XMLHttpRequest();
-        const url = "https://www.edb.gov.hk/attachment/en/student-parents/sch-info/sch-search/sch-location-info/SCH_LOC_EDB.json";
+        const url = "schoolData.json";
 
         return new Promise(function (resolve, reject) {
             xhr.onreadystatechange = function () {
@@ -13,13 +13,12 @@ $(document).ready(function () {
                     const localStorage = window.localStorage;
                     if (localStorage) {
                         localStorage.setItem("schoolData", JSON.stringify(schoolData));
-                        console.log('[DATA][Promise] '+url+' stored in localStorage')
+                        console.log('[DATA][Promise] ' + url + ' stored in localStorage')
                     }
                     resolve();
                 }
-               
             };
-            xhr.open("get", url);
+            xhr.open("get", url, true);
             xhr.send();
         });
     }
@@ -103,9 +102,7 @@ $(document).ready(function () {
                     }
 
                 }
-
-            ],
-
+            ]
         })
     })
 });
