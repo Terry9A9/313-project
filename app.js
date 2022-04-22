@@ -1,5 +1,13 @@
-$(document).ready(function () {
-
+let file_url;
+const file_name = "schoolData";
+if (!navigator.onLine) {
+    //if offline
+    console.log("[Offline]")
+    file_url = function (data, callback, settings) {
+        callback(
+            JSON.parse(localStorage.getItem(file_name))
+        );
+    }
     function getData() {
         const xhr = new XMLHttpRequest();
         const url = "schoolData.json";
@@ -9,12 +17,13 @@ $(document).ready(function () {
                 if (xhr.readyState === 4) {
                     var schoolData = JSON.parse(xhr.response);
 
-                    // Store data data to localstorage
+                    // Store cached data to local storage, let dataTable use in offline mode
                     const localStorage = window.localStorage;
                     if (localStorage) {
-                        localStorage.setItem("schoolData", JSON.stringify(schoolData));
-                        console.log('[DATA][Promise] ' + url + ' stored in localStorage')
+                        localStorage.setItem(file_name, JSON.stringify(schoolData));
+                        console.log('[Offline][Promise] ' + url + ' stored in localStorage')
                     }
+                    console.log("[Offline] DataTable is using localStorage"),
                     resolve();
                 }
             };
@@ -22,9 +31,20 @@ $(document).ready(function () {
             xhr.send();
         });
     }
+}else{
+    //if online
+    console.log("[Online]")
+    file_url = "schoolData.json"
+    function getData() {
+        return new Promise(function (resolve, reject) {
+            resolve();
+        })
+    }
+}
+$(document).ready(function () {
 
     getData().then(function () {
-        console.log("[DATA] loading dataTable")
+        console.log("[DataTable] loading dataTable")
         $('#originalTable').dataTable({
             "pagingType": "simple",
             "autoWidth": false,
@@ -52,12 +72,7 @@ $(document).ready(function () {
                 { responsivePriority: 2, targets: -1 }
             ],
             "deferRender": true,
-            ajax: function (data, callback, settings) {
-                callback(
-                    JSON.parse(localStorage.getItem('schoolData'))
-                );
-            },
-
+            ajax: file_url,
             initComplete: function () {
                 var filter_cols = [1, 2, 3, 4, 6, 7]
                 this.api().columns(filter_cols).every(function () {
