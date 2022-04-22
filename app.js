@@ -26,16 +26,37 @@ $(document).ready(function () {
     getData().then(function () {
         console.log("[DATA] loading dataTable")
         $('#originalTable').dataTable({
-            ajax: function (data, callback, settings) {
-                callback(
-                    JSON.parse(localStorage.getItem('schoolData'))
-                );
+            "pagingType": "simple",
+            "language": {
+                "lengthMenu": "每頁顯示 _MENU_ 條",
+                "zeroRecords": "沒有資料",
+                "info": "顯示第 _PAGE_ 頁，共 _PAGES_ 頁",
+                "infoEmpty": "沒有可用的記錄",
+                "infoFiltered": "(從 _MAX_ 條記錄中過濾)",
+                "processing": "處理中...",
+                "loadingRecords": "正在加載...",
+                "search": "搜尋",
+                "paginate": {
+                    "next":       "下一頁",
+                    "previous":   "上一頁"
+                },
             },
             rowReorder: {
                 selector: 'td:nth-child(2)'
             },
             rowReorder: false,
             responsive: true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+            ],
+            "deferRender": true,
+            ajax: function (data, callback, settings) {
+                callback(
+                    JSON.parse(localStorage.getItem('schoolData'))
+                );
+            },
+
             initComplete: function () {
                 var filter_cols = [1, 2, 3, 4, 6, 7]
                 this.api().columns(filter_cols).every(function () {
