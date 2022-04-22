@@ -27,6 +27,7 @@ $(document).ready(function () {
         console.log("[DATA] loading dataTable")
         $('#originalTable').dataTable({
             "pagingType": "simple",
+            "autoWidth": false,
             "language": {
                 "lengthMenu": "每頁顯示 _MENU_ 條",
                 "zeroRecords": "沒有資料",
