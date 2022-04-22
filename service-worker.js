@@ -30,7 +30,8 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(clearCache());
 });
 
-// When there's an incoming fetch request, try and respond with a precached resource, otherwise fall back to the network
+
+// Network first, otherwise fall back to cache
 self.addEventListener('fetch', (event) => {
   console.log('[Service worker] Fetch intercepted for:', event.request.url);
   event.respondWith(
