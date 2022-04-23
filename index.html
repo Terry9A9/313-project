@@ -5,7 +5,7 @@
   <title>Search For School</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="white"/>
+  <meta name="theme-color" content="white" />
   <!--Handle the picker-->
   <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
   <link rel="manifest" href="manifest.json">
@@ -13,44 +13,84 @@
   <link rel="import" href="/schoolData11.json" />
   <script src="service-worker.js"></script>
   <script src="app.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
 
-  <link rel="stylesheet" type="text/css" href="datatables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="datatables.min.css" />
   <script type="text/javascript" src="datatables.min.js"></script>
 
   <link rel="apple-touch-icon" href="ios/192.png">
+  
   <style type="text/css">
-    .mobile-filter {
+    .mobile-filters {
       display: inline;
       padding: 100px;
-      text-align: center;
     }
-    html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
+
+    .filter {
+      padding-bottom: 10px;
+      text-align: center
+    }
+
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    #map {
+      width: auto;
+      position: static;
+      height: 300px
+    }
   </style>
 
 </head>
 
 <body>
+  <!-- Modal Fullscreen sm -->
+  <div class="modal modal-fullscreen-sm" id="modal-fullscreen-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Map</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div id="datatable">
-    <div class="mobile-filter">
-      <div id="mobile-filter1">
+    <div class="mobile-filters">
+      <div id="mobile-filter1" class="filter">
         分區:
       </div>
-      <div id="mobile-filter2">
+      <div id="mobile-filter2" class="filter">
         資助種類:
       </div>
-      <div id="mobile-filter3">
+      <div id="mobile-filter3" class="filter">
         就讀性別:
       </div>
-      <div id="mobile-filter4">
+      <div id="mobile-filter4" class="filter">
         類型:
       </div>
-      <div id="mobile-filter6">
+      <div id="mobile-filter6" class="filter">
         授課時間:
       </div>
-      <div id="mobile-filter7">
+      <div id="mobile-filter7" class="filter">
         宗教:
       </div>
     </div>
@@ -79,12 +119,20 @@
           <th>授課時間</th>
           <th>宗教</th>
           <th>URL</th>
+          <th></th>
+          <th></th>
         </tr>
       </tfoot>
     </table>
   </div>
 </body>
 <script>
+  let lat_long;
+</script>
+<script>
+  function reloadMap() {
+
+  }
   if ('serviceWorker' in navigator) {
     // Wait for the 'load' event to not block other work
     window.addEventListener('load', async () => {
@@ -94,7 +142,7 @@
         //const reg = await navigator.serviceWorker.register('service-worker.js');
 
         //deploy
-        const reg = await navigator.serviceWorker.register('/313-project/service-worker.js',{scope: '/313-project/'});
+        const reg = await navigator.serviceWorker.register('/313-project/service-worker.js', { scope: '/313-project/' });
         console.log('[Service worker] registered', reg);
       } catch (err) {
         console.log('[Service worker] registration failed: ', err);
