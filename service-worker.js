@@ -17,17 +17,15 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   console.log('[Service worker] activate event!');
-  self.clients.claim();
-  const clearCache = async () => {
-    const keys = await caches.keys();
-    keys.forEach(async (k) => {
-      if (cacheName.includes(k)) {
-        return;
+  event.waitUntil((async () => {
+    const cacheNames = await caches.keys();
+
+    await Promise.all(cacheNames.map(async (cacheName) => {
+      if (self.cacheName !== cacheName) {
+        await caches.delete(cacheName);
       }
-      await caches.delete(k);
-    });
-  };
-  event.waitUntil(clearCache());
+    }));
+  })());
 });
 
 
