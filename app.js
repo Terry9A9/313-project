@@ -22,6 +22,7 @@ function backToTop() {
 }
 
 async function fetchNearSchoolMap() {
+    
     var org = document.getElementById("nearSchoolbtn").innerHTML
     document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
     const response = await fetch(nearSchoolApi);
@@ -194,10 +195,11 @@ function moveMap(lat,long,name){
     $("#modal-fullscreen-sm").scrollTop(0);
     map.setView([lat,long],20)
     marker.bindTooltip(name).openTooltip([lat,long])
+
 }
 
 function createMap(lat, long, name) {
-
+    
     let lat_long = [lat, long]
     //reset map
     document.getElementsByClassName('modal-body')[0].innerHTML = "<div id='map'></div>";
@@ -223,7 +225,14 @@ function createMap(lat, long, name) {
     $('#modal-fullscreen-sm').on('shown.bs.modal', function () {
         map.invalidateSize();
     });
-    document.getElementById("nearSchoolbtn").disabled = false
+    if (navigator.onLine) {
+        document.getElementById("nearSchoolbtn").disabled = false
+        
+    }else{
+        document.getElementById("nearSchoolbtn").disabled = true
+        html = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
+        document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", html)
+    }
     document.getElementById("nearSchoolbtn").textContent = `附近的學校`
     nearSchoolApi = `https://api.data.gov.hk/v1/nearest-schools?lat=${lat}&long=${long}&max=10`
 }
@@ -239,7 +248,6 @@ if (!navigator.onLine) {
     function getData() {
         const xhr = new XMLHttpRequest();
         const url = "schoolData.json";
-
         return new Promise(function (resolve, reject) {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
@@ -270,7 +278,7 @@ if (!navigator.onLine) {
 }
 
 $(document).ready(function () {
-
+    
     getData().then(function () {
         console.log("[DataTable] loading dataTable")
         $('#originalTable').dataTable({
@@ -379,6 +387,7 @@ $(document).ready(function () {
                 { "visible": false, "targets": [10] }
             ]
         })
+        $('.toast').toast('show');
     })
     $(window).scroll(function(){ 
         if ($(this).scrollTop() > 100) { 
@@ -391,5 +400,6 @@ $(document).ready(function () {
         $("html, body").animate({ scrollTop: 0 }, 600); 
         return false; 
     }); 
+    
 });
 

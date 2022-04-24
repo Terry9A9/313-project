@@ -3,10 +3,10 @@ const cacheName = 'cache-v1';
 // List the files to precache
 
 //local test
-//const preCacheResources = ['/', '/app.js', '/schoolData.json', '/service-worker.js', '/manifest.json', '/index.html'];
+const preCacheResources = ['/', '/app.js', '/schoolData.json', '/service-worker.js', '/manifest.json', '/index.html', '/js/datatables.min.js', '/js/datatables.min.css', '/style.css'];
 
 //deploy
-const preCacheResources = ['/313-project/', '/313-project/index.html', '/313-project/style.css', '/313-project/app.js', '/313-project/schoolData.json'];
+//const preCacheResources = ['/313-project/', '/313-project/index.html', '/313-project/style.css', '/313-project/app.js', '/313-project/schoolData.json','/313-project/js/datatables.min.js','/313-project/js/datatables.min.css',, '/313-project/style.css'];
 
 
 // When the service worker is installing, open the cache and add the precache resources to it
@@ -17,15 +17,17 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   console.log('[Service worker] activate event!');
-  event.waitUntil((async () => {
-    const cacheNames = await caches.keys();
-
-    await Promise.all(cacheNames.map(async (cacheName) => {
-      if (self.cacheName !== cacheName) {
-        await caches.delete(cacheName);
+  self.clients.claim();
+  const clearCache = async () => {
+    const keys = await caches.keys();
+    keys.forEach(async (k) => {
+      if (cacheName.includes(k)) {
+        return;
       }
-    }));
-  })());
+      await caches.delete(k);
+    });
+  };
+  event.waitUntil(clearCache());
 });
 
 

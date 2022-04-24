@@ -1,0 +1,36 @@
+.mobile-filters {
+    display: inline;
+    padding: 100px;
+}
+
+.filter {
+    padding-bottom: 10px;
+    text-align: center
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+#map {
+    width: auto;
+    position: static;
+    height: 300px
+}
+
+.leaflet-tooltip {
+    width: 100px;
+    white-space: normal;
+}
+
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+}
+.toast {
+    z-index: 7000;
+}
