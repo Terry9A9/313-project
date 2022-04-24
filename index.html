@@ -7,7 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="white" />
   <!--Handle the picker-->
-  <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript" language="javascript"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
   <link rel="manifest" href="manifest.json">
   <link rel="canonical" href="https://terry9a9.github.io/313-project/" />
   <link rel="import" href="/schoolData11.json" />
@@ -25,7 +26,7 @@
   <script type="text/javascript" src="datatables.min.js"></script>
 
   <link rel="apple-touch-icon" href="ios/192.png">
-  
+
   <style type="text/css">
     .mobile-filters {
       display: inline;
@@ -48,11 +49,24 @@
       position: static;
       height: 300px
     }
+
+    .leaflet-tooltip {
+      width: 100px;
+      white-space: normal;
+    }
+
+    #btn-back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: none;
+    }
   </style>
 
 </head>
 
 <body>
+
   <!-- Modal Fullscreen sm -->
   <div class="modal modal-fullscreen-sm" id="modal-fullscreen-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -66,6 +80,7 @@
         <div class="modal-body">
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="nearSchoolbtn" onclick="fetchNearSchoolMap()"></button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -106,6 +121,7 @@
           <th data-priority="2">授課時間</th>
           <th>宗教</th>
           <th>URL</th>
+          <th></th>
         </tr>
       </thead>
       <tfoot>
@@ -124,6 +140,10 @@
         </tr>
       </tfoot>
     </table>
+    
+  <button type="button" class="btn btn-danger btn-floating btn-lg cd-top--fade-out" id="btn-back-to-top" onclick="backToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </button> 
   </div>
 </body>
 <script>
