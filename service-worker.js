@@ -3,10 +3,10 @@ const cacheName = 'cache-v1';
 // List the files to precache
 
 //local test
-const preCacheResources = ['/', '/app.js', '/schoolData.json', '/service-worker.js', '/manifest.json', '/index.html', '/js/datatables.min.js', '/js/datatables.min.css', '/style.css'];
+//const preCacheResources = ['/', '/app.js', '/schoolData.json', '/service-worker.js', '/manifest.json', '/index.html', '/js/datatables.min.js', '/js/datatables.min.css', '/style.css'];
 
 //deploy
-//const preCacheResources = ['/313-project/', '/313-project/index.html', '/313-project/style.css', '/313-project/app.js', '/313-project/schoolData.json','/313-project/js/datatables.min.js','/313-project/js/datatables.min.css',, '/313-project/style.css'];
+const preCacheResources = ['/313-project/', '/313-project/index.html', '/313-project/style.css', '/313-project/app.js', '/313-project/schoolData.json','/313-project/js/datatables.min.js','/313-project/js/datatables.min.css',, '/313-project/style.css'];
 
 
 // When the service worker is installing, open the cache and add the precache resources to it
