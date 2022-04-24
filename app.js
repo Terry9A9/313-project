@@ -167,53 +167,6 @@ async function fetchNearSchoolMap() {
                 responsivePriority: 1000,
             },
         ],
-        buttons: {
-			buttons: [
-				{ extend: 'copyHtml5', 
-					text: '<i class="fas fa-copy"></i>', 
-					className: 'btn-primary', 
-					title: tableTitle, 
-					messageTop: tableSubTitle, 
-					titleAttr: 'Copy to Clipboard' 
-				},
-				{ extend: 'csvHtml5', 
-					text: '<i class="fas fa-file-csv"></i>', 
-					className: 'btn-primary', 
-					titleAttr: 'Export to CSV' 
-				},
-				{ extend: 'excelHtml5', 
-					text: '<i class="fas fa-file-excel"></i>', 
-					className: 'btn-primary', 
-					title: tableTitle,  
-					messageTop: tableSubTitle, 
-					titleAttr: 'Export to Excel' 
-				},
-				{ extend: 'pdfHtml5', 
-					text: '<i class="fas fa-file-pdf"></i>', 
-					className: 'btn-primary', 
-					title: tableTitle,  
-					messageTop: tableSubTitle, 
-					titleAttr: 'Export to PDF' 
-				},
-				{ extend: 'print', 
-					text: '<i class="fas fa-print"></i>', 
-					className: 'btn-primary', 
-					title: tableTitle,  
-					messageTop: tableSubTitle, 
-					titleAttr: 'Print Table' 
-				},
-				{ extend: 'colvis', 
-					text: '<i class="fas fa-columns"></i>', 
-					className: 'btn-primary', 
-					titleAttr: 'Show/Hide Columns' 
-				}
-			],
-			dom: {
-			   	button: {
-				className: 'btn'
-				}
-			}
-        },
         initComplete: function () {
             var filter_cols = [1, 2, 3, 4, 6, 7]
             this.api().columns(filter_cols).every(function () {
