@@ -1,28 +1,28 @@
-let file_url, nearSchoolApi, map, layer,marker;
+let file_url, nearSchoolApi, map, layer, marker;
 const file_name = "schoolData";
 
 window.onscroll = function () {
-  scrollFunction();
+    scrollFunction();
 };
 
 function scrollFunction() {
-  if (
-    document.body.scrollTop > 20 ||
-    document.documentElement.scrollTop > 20
-  ) {
-    document.getElementById("btn-back-to-top").style.display = "block";
-  } else {
-    document.getElementById("btn-back-to-top").style.display = "none";
-  }
+    if (
+        document.body.scrollTop > 20 ||
+        document.documentElement.scrollTop > 20
+    ) {
+        document.getElementById("btn-back-to-top").style.display = "block";
+    } else {
+        document.getElementById("btn-back-to-top").style.display = "none";
+    }
 }
 
 function backToTop() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 async function fetchNearSchoolMap() {
-    
+
     var org = document.getElementById("nearSchoolbtn").innerHTML
     document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
     const response = await fetch(nearSchoolApi);
@@ -43,13 +43,14 @@ async function fetchNearSchoolMap() {
     map.fitBounds(bounds)
     document.getElementById("nearSchoolbtn").innerHTML = org
     document.getElementById("nearSchoolbtn").disabled = true
-    let html = 
-    `<div>
+    let html =
+        `<div>
         <br/>
         <table id="nearDataTable" class="table table-striped table-hover table-scroll">
             <thead>
             <tr>
                 <th>名稱</th>
+                <th></th>
                 <th>分區</th>
                 <th>資助種類</th>
                 <th>就讀性別</th>
@@ -63,6 +64,7 @@ async function fetchNearSchoolMap() {
             <tfoot>
                 <tr>
                     <th>名稱</th>
+                    <th></th>
                     <th>分區</th>
                     <th>資助種類</th>
                     <th>就讀性別</th>
@@ -76,37 +78,33 @@ async function fetchNearSchoolMap() {
         </table>
     </div>`
     document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", html)
-    var selected = [];
-    var table = $('#nearDataTable').DataTable({
-        select : true,
-        "autoWidth": false,
+    $('#nearDataTable').DataTable({
+        autoWidth: false,
         rowReorder: {
             selector: 'td:nth-child(2)'
-        },
-        "rowCallback": function( row, data ) {
-            if ( $.inArray(data.DT_RowId, selected) !== -1 ) {
-                $(row).addClass('selected');
-            }
         },
         rowReorder: false,
         responsive: true,
         data: data["results"],
         "columns": [
-            { data: "name-zh", title: "名稱" },
-            { data: "district-zh", title: "分區" },
-            { data: "finance-type-zh", title: "資助" },
-            { data: "student-gender-zh", title: "就讀性別" },
-            { 
-                data: "level-zh", title: "類型",
-                render: function (data, type , row) {
-                    return `${data} <a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
+            { data: "name-zh", title: "名稱", width: "100   %", },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `<a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
                     <i class="fas fa-map-marked-alt"></i>
                     </a>`
                 }
             },
-            { 
+            { data: "district-zh", title: "分區" },
+            { data: "finance-type-zh", title: "資助" },
+            { data: "student-gender-zh", title: "就讀性別" },
+            {
+                data: "level-zh", title: "類型"
+            },
+            {
                 data: "address-zh", title: "地址",
-                render: function (data, type , row) {
+                render: function (data, type, row) {
                     return `${data} <a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
                     <i class="fas fa-map-marked-alt"></i>
                     </a>`
@@ -131,75 +129,50 @@ async function fetchNearSchoolMap() {
         ],
         "columnDefs": [
             {
-                targets: [0],
-                responsivePriority: 0,
-            },
-            {
-                targets: [1],
-                responsivePriority: 1000,
-            },
-            {
                 targets: [2],
-                responsivePriority: 1000,
+                className: 'none',
             },
             {
                 targets: [3],
-                responsivePriority: 1000,
+                className: 'none',
             },
             {
                 targets: [4],
-                responsivePriority: 0,
+                className: 'none',
             },
             {
                 targets: [5],
-                responsivePriority: 1000,
+                className: 'none',
             },
             {
                 targets: [6],
-                responsivePriority: 1000,
+                className: 'none',
             },
             {
                 targets: [7],
-                responsivePriority: 1000,
+                className: 'none',
             },
             {
                 targets: [8],
-                responsivePriority: 1000,
+                className: 'none',
             },
-        ],
-        initComplete: function () {
-            var filter_cols = [1, 2, 3, 4, 6, 7]
-            this.api().columns(filter_cols).every(function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column
-                            .search(val ? '^' + val + '$' : '', true, false)
-                            .draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
-        },
-    })  
+            {
+                targets: [9],
+                className: 'none',
+            },
+        ]
+    })
 }
 
-function moveMap(lat,long,name){
+function moveMap(lat, long, name) {
     $("#modal-fullscreen-sm").scrollTop(0);
-    map.setView([lat,long],20)
-    marker.bindTooltip(name).openTooltip([lat,long])
+    map.setView([lat, long], 20)
+    marker.bindTooltip(name).openTooltip([lat, long])
 
 }
 
 function createMap(lat, long, name) {
-    
+
     let lat_long = [lat, long]
     //reset map
     document.getElementsByClassName('modal-body')[0].innerHTML = "<div id='map'></div>";
@@ -227,8 +200,8 @@ function createMap(lat, long, name) {
     });
     if (navigator.onLine) {
         document.getElementById("nearSchoolbtn").disabled = false
-        
-    }else{
+
+    } else {
         document.getElementById("nearSchoolbtn").disabled = true
         html = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
         document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", html)
@@ -278,7 +251,7 @@ if (!navigator.onLine) {
 }
 
 $(document).ready(function () {
-    
+
     getData().then(function () {
         console.log("[DataTable] loading dataTable")
         $('#originalTable').dataTable({
@@ -360,7 +333,7 @@ $(document).ready(function () {
                 {
                     data: "G", title: "地址",
                     render: function (data, type, row) {
-                        return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.E}" onclick=createMap(${row.K},${row.I},this.value)>Map</button>`
+                        return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.E}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
                     }
                 },
                 { data: "S", title: "授課時間" },
@@ -387,19 +360,20 @@ $(document).ready(function () {
                 { "visible": false, "targets": [10] }
             ]
         })
-        $('.toast').toast('show');
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("datatable").style.display = "block";
     })
-    $(window).scroll(function(){ 
-        if ($(this).scrollTop() > 100) { 
-            $('#scroll').fadeIn(); 
-        } else { 
-            $('#scroll').fadeOut(); 
-        } 
-    }); 
-    $('#scroll').click(function(){ 
-        $("html, body").animate({ scrollTop: 0 }, 600); 
-        return false; 
-    }); 
-    
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('#scroll').fadeIn();
+        } else {
+            $('#scroll').fadeOut();
+        }
+    });
+    $('#scroll').click(function () {
+        $("html, body").animate({ scrollTop: 0 }, 600);
+        return false;
+    });
+
 });
 
