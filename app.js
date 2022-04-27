@@ -295,7 +295,7 @@ $(document).ready(function () {
             "deferRender": true,
             ajax: file_url,
             initComplete: function () {
-                var filter_cols = [1, 2, 3, 4, 6, 7]
+                var filter_cols = [1, 2, 7, 4, 6, 3]
                 this.api().columns(filter_cols).every(function () {
                     var column = this;
                     var select = $('<select><option value=""></option></select>')
@@ -317,7 +317,7 @@ $(document).ready(function () {
                 filter_cols.forEach(col => {
                     this.api().columns(col).every(function () {
                         var column = this;
-                        var select = $('<select><option value=""></option></select>')
+                        var select = $('<select  class="form-select" aria-label="Default select" style="width:auto;"><option value=""></option></select>')
                             .appendTo($("#mobile-filter" + col))
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
@@ -387,7 +387,7 @@ $(document).ready(function () {
                 { "visible": false, "targets": [10] }
             ]
         })
-
+        $("html, body").animate({ scrollTop: 0 }, 600); 
     })
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
