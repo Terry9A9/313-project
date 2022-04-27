@@ -360,8 +360,7 @@ $(document).ready(function () {
                 { "visible": false, "targets": [10] }
             ]
         })
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("datatable").style.display = "block";
+
     })
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
