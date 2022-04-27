@@ -97,7 +97,7 @@ async function fetchNearSchoolMap() {
                         return `${data} <i class="fa-solid fa-child-dress"></i>`
                     }
                     else if ("男女" == row["student-gender-zh"]){
-                        return `${data} <i class="fa-solid fa-children"></i>`
+                        return `${data} <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
                     }
                 }
             },
@@ -278,7 +278,7 @@ $(document).ready(function () {
                 "processing": "處理中...",
                 "loadingRecords": "正在加載...",
                 "search": "搜尋",
-                "paginate": {
+                "paginate": {   
                     "next": "下一頁",
                     "previous": "上一頁"
                 },
@@ -341,13 +341,13 @@ $(document).ready(function () {
                     data: "E", title: "名稱",
                     render: function (data, type, row) {
                         if("男" == row.Q){
-                            return `${data} <i class="fa-solid fa-child"></i>`
+                            return `${data}  <i class="fa-solid fa-child"></i>`
                         }
                         else if("女" == row.Q){
-                            return `${data} <i class="fa-solid fa-child-dress"></i>`
+                            return `${data}  <i class="fa-solid fa-child-dress"></i>`
                         }
                         else if ("男女" == row.Q){
-                            return `${data} <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
+                            return `${data}  <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
                         }else{
                             return `${data}`
                         }
@@ -378,13 +378,37 @@ $(document).ready(function () {
                         }
                         return data;
                     }
-                },
-                { data: "K", title: "lat" },
-                { data: "I", title: "long" }
+                }
             ],
             "columnDefs": [
-                { "visible": false, "targets": [9] },
-                { "visible": false, "targets": [10] }
+                {
+                    targets: [1],
+                    className: 'none',
+                },
+                {
+                    targets: [3],
+                    className: 'none',
+                },
+                {
+                    targets: [4],
+                    className: 'none',
+                },
+                {
+                    targets: [5],
+                    className: 'none',
+                },
+                {
+                    targets: [6],
+                    className: 'none',
+                },
+                {
+                    targets: [7],
+                    className: 'none',
+                },
+                {
+                    targets: [8],
+                    className: 'none',
+                }
             ]
         })
         $("html, body").animate({ scrollTop: 0 }, 600); 
