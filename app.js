@@ -87,7 +87,20 @@ async function fetchNearSchoolMap() {
         responsive: true,
         data: data["results"],
         "columns": [
-            { data: "name-zh", title: "名稱", width: "100   %", },
+            { 
+                data: "name-zh", title: "名稱", width: "100%",
+                render: function (data, type, row) {
+                    if("男" == row["student-gender-zh"]){
+                        return `${data} <i class="fa-solid fa-child"></i>`
+                    }
+                    else if("女" == row["student-gender-zh"]){
+                        return `${data} <i class="fa-solid fa-child-dress"></i>`
+                    }
+                    else if ("男女" == row["student-gender-zh"]){
+                        return `${data} <i class="fa-solid fa-children"></i>`
+                    }
+                }
+            },
             {
                 data: null,
                 render: function (data, type, row) {
@@ -251,7 +264,6 @@ if (!navigator.onLine) {
 }
 
 $(document).ready(function () {
-
     getData().then(function () {
         console.log("[DataTable] loading dataTable")
         $('#originalTable').dataTable({
@@ -325,7 +337,22 @@ $(document).ready(function () {
 
             },
             "columns": [
-                { data: "E", title: "名稱" },
+                { 
+                    data: "E", title: "名稱",
+                    render: function (data, type, row) {
+                        if("男" == row.Q){
+                            return `${data} <i class="fa-solid fa-child"></i>`
+                        }
+                        else if("女" == row.Q){
+                            return `${data} <i class="fa-solid fa-child-dress"></i>`
+                        }
+                        else if ("男女" == row.Q){
+                            return `${data} <i class="fa-solid fa-children"></i>`
+                        }else{
+                            return `${data}`
+                        }
+                    }
+                },
                 { data: "U", title: "分區" },
                 { data: "W", title: "資助種類" },
                 { data: "Q", title: "就讀性別" },
