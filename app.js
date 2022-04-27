@@ -317,7 +317,7 @@ $(document).ready(function () {
                 filter_cols.forEach(col => {
                     this.api().columns(col).every(function () {
                         var column = this;
-                        var select = $('<select  class="form-select" aria-label="Default select" style="width:auto;"><option value=""></option></select>')
+                        var select = $('<select  class="form-select" aria-label="Default select" style="width:150px;"><option value=""></option></select>')
                             .appendTo($("#mobile-filter" + col))
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
