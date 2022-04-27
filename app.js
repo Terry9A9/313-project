@@ -347,7 +347,7 @@ $(document).ready(function () {
                             return `${data} <i class="fa-solid fa-child-dress"></i>`
                         }
                         else if ("男女" == row.Q){
-                            return `${data} <i class="fa-solid fa-children"></i>`
+                            return `${data} <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
                         }else{
                             return `${data}`
                         }
