@@ -91,13 +91,13 @@ async function fetchNearSchoolMap() {
                 data: "name-zh", title: "名稱", width: "100%",
                 render: function (data, type, row) {
                     if("男" == row["student-gender-zh"]){
-                        return `${data} <i class="fa-solid fa-child"></i>`
+                        return `<i class="fa-solid fa-child"></i> ${data}`
                     }
                     else if("女" == row["student-gender-zh"]){
-                        return `${data} <i class="fa-solid fa-child-dress"></i>`
+                        return `<i class="fa-solid fa-child-dress"></i> ${data}`
                     }
                     else if ("男女" == row["student-gender-zh"]){
-                        return `${data} <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
+                        return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
                     }
                 }
             },
@@ -299,7 +299,7 @@ $(document).ready(function () {
                 filter_cols.forEach(col => {
                     this.api().columns(col).every(function () {
                         var column = this;
-                        var select = $('<select  class="form-select" aria-label="Default select" style="width:150px;"><option value=""></option></select>')
+                        var select = $('<select  class="form-select" aria-label="Default select" style="width:100%; padding: 2px;"><option value=""></option></select>')
                             .appendTo($("#mobile-filter" + col))
                             .on('change', function () {
                                 var val = $.fn.dataTable.util.escapeRegex(
@@ -322,13 +322,13 @@ $(document).ready(function () {
                     data: "E", title: "名稱",
                     render: function (data, type, row) {
                         if("男" == row.Q){
-                            return `${data}  <i class="fa-solid fa-child"></i>`
+                            return `<i class="fa-solid fa-child"></i> ${data}`
                         }
                         else if("女" == row.Q){
-                            return `${data}  <i class="fa-solid fa-child-dress"></i>`
+                            return `<i class="fa-solid fa-child-dress"></i> ${data}`
                         }
                         else if ("男女" == row.Q){
-                            return `${data}  <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i>`
+                            return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
                         }else{
                             return `${data}`
                         }

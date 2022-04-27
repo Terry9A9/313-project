@@ -3,9 +3,12 @@
   padding: 100px;
 }
 
+.searchLabel{
+  margin-bottom: 2px;
+}
+
 .filter {
   padding: 5px;
-  text-align: center;
 }
 
 html,
