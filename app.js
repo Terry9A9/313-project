@@ -296,24 +296,6 @@ $(document).ready(function () {
             ajax: file_url,
             initComplete: function () {
                 var filter_cols = [1, 2, 7, 4, 6, 3]
-                this.api().columns(filter_cols).every(function () {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
                 filter_cols.forEach(col => {
                     this.api().columns(col).every(function () {
                         var column = this;
@@ -395,10 +377,6 @@ $(document).ready(function () {
                 },
                 {
                     targets: [5],
-                    className: 'none',
-                },
-                {
-                    targets: [6],
                     className: 'none',
                 },
                 {
