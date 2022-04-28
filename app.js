@@ -1,4 +1,4 @@
-let file_url, nearSchoolApi, map, layer, marker, mainTableCol,tableLang;
+let file_url, nearSchoolApi, map, layer, marker, mainTableCol, tableLang, nearSchCol;
 const file_name = "schoolData";
 
 function changeEn(language) {
@@ -20,8 +20,8 @@ function changeZh(language) {
     document.getElementById("englishBtn").className = "nav-link ";
     location.reload()
 }
-let language = localStorage.getItem("language")
 
+const language = localStorage.getItem("language")
 
 window.onscroll = function () {
     scrollFunction();
@@ -49,16 +49,28 @@ async function fetchNearSchoolMap() {
     document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
     const response = await fetch(nearSchoolApi);
     let data = await response.json();
+    console.log(data)
     var bounds = new L.latLngBounds()
     data["results"].forEach(school => {
         marker = L.marker(school["lat-long"]);
-        prevName = school["name-zh"]
-        marker.bindTooltip(school["name-zh"], {
-            direction: 'bottom',
-            sticky: true,
-            permanent: false,
-            opacity: 1.0
-        }).openTooltip();
+        if (language == 'en') {
+            prevName = school["name-en"]
+            marker.bindTooltip(school["name-en"], {
+                direction: 'bottom',
+                sticky: true,
+                permanent: false,
+                opacity: 1.0
+            }).openTooltip();
+        }else{
+            prevName = school["name-zh"]
+            marker.bindTooltip(school["name-zh"], {
+                direction: 'bottom',
+                sticky: true,
+                permanent: false,
+                opacity: 1.0
+            }).openTooltip();
+        }
+
         marker.addTo(map)
         bounds.extend(school["lat-long"])
     });
@@ -109,60 +121,7 @@ async function fetchNearSchoolMap() {
         "language": tableLang,
         responsive: true,
         data: data["results"],
-        "columns": [
-            {
-                data: "name-zh", title: "名稱", width: "100%",
-                render: function (data, type, row) {
-                    if ("男" == row["student-gender-zh"]) {
-                        return `<i class="fa-solid fa-child"></i> ${data}`
-                    }
-                    else if ("女" == row["student-gender-zh"]) {
-                        return `<i class="fa-solid fa-child-dress"></i> ${data}`
-                    }
-                    else if ("男女" == row["student-gender-zh"]) {
-                        return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
-                    }
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return `<a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
-                    <i class="fas fa-map-marked-alt"></i>
-                    </a>`
-                }
-            },
-            { data: "district-zh", title: "分區" },
-            { data: "finance-type-zh", title: "資助" },
-            { data: "student-gender-zh", title: "就讀性別" },
-            {
-                data: "level-zh", title: "類型"
-            },
-            {
-                data: "address-zh", title: "地址",
-                render: function (data, type, row) {
-                    return `${data} <a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
-                    <i class="fas fa-map-marked-alt"></i>
-                    </a>`
-                }
-            },
-            { data: "session-zh", title: "授課時間" },
-            { data: "religion-zh", title: "宗教" },
-            {
-                data: "website", title: "URL",
-                render: function (data, type) {
-                    if (type === 'display') {
-                        if (data.length <= 0) {
-                            return 'No Web Site';
-                        }
-                        else {
-                            return '<a href="' + data + '">' + "Website" + '</a>';
-                        }
-                    }
-                    return data;
-                }
-            }
-        ],
+        "columns": nearSchCol,
         "columnDefs": [
             {
                 targets: [2],
@@ -242,7 +201,7 @@ function createMap(lat, long, name) {
         html = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
         document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", html)
     }
-    document.getElementById("nearSchoolbtn").textContent = `附近的學校`
+    // document.getElementById("nearSchoolbtn").textContent = `附近的學校`
     nearSchoolApi = `https://api.data.gov.hk/v1/nearest-schools?lat=${lat}&long=${long}&max=10`
 }
 
@@ -287,59 +246,127 @@ if (!navigator.onLine) {
 }
 
 $(document).ready(function () {
-    if(language == 'en'){
+    if (language == 'en') {
         document.getElementById("chineseBtn").className = "nav-link";
         document.getElementById("englishBtn").className = "nav-link active";
-        document.getElementsByClassName("searchLabel")[0].textContent = "DISTRICT:";
-        mainTableCol =[{
-            data: "D", title: "NAME",
-            render: function (data, type, row) {
-                if ("男" == row.Q) {
-                    return `<i class="fa-solid fa-child"></i> ${data}`
-                }
-                else if ("女" == row.Q) {
-                    return `<i class="fa-solid fa-child-dress"></i> ${data}`
-                }
-                else if ("男女" == row.Q) {
-                    return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
-                } else {
-                    return `${data}`
-                }
-            }
-        },
-        { data: "T", title: "DISTRICT" },
-        { data: "V", title: "FINANCE TYPE" },
-        { data: "P", title: "STUDENTS GENDER" },
-        { data: "X", title: "SCHOOL LEVEL" },
-        {
-            data: "F", title: "ENGLISH ADDRESS",
-            render: function (data, type, row) {
-                return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.D}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
-            }
-        },
-        { data: "R", title: "SESSION" },
-        { data: "AF", title: "RELIGION" },
-        {
-            data: "AD", title: "WEBSITE",
-            render: function (data, type) {
-                if (type === 'display') {
-                    if (data.length <= 0) {
-                        return 'No Web Site';
+        document.getElementsByClassName("searchLabel")[0].textContent = "District:";
+        document.getElementsByClassName("searchLabel")[1].textContent = "Finance Type:";
+        document.getElementsByClassName("searchLabel")[2].textContent = "Students Gender:";
+        document.getElementsByClassName("searchLabel")[3].textContent = "School Type:";
+        document.getElementsByClassName("searchLabel")[4].textContent = "Session:";
+        document.getElementsByClassName("searchLabel")[5].textContent = "Religion:";
+        document.getElementById("nearSchoolbtn").textContent = `Nearest School`;
+        document.getElementById("closeBtn").textContent = "Close";
+        document.getElementsByClassName("navbar-brand")[0].innerHTML = `<img class="logo" src="icons/ios/512.png"
+        height="40"> Find School</a>`
+
+        mainTableCol = [
+            {
+                data: "D", title: "NAME",
+                render: function (data, type, row) {
+                    if ("男" == row.Q) {
+                        return `<i class="fa-solid fa-child"></i> ${data}`
                     }
-                    else {
-                        return '<a href="' + data + '">' + "Website" + '</a>';
+                    else if ("女" == row.Q) {
+                        return `<i class="fa-solid fa-child-dress"></i> ${data}`
+                    }
+                    else if ("男女" == row.Q) {
+                        return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
+                    } else {
+                        return `${data}`
                     }
                 }
-                return data;
+            },
+            { data: "T", title: "DISTRICT" },
+            { data: "V", title: "FINANCE TYPE" },
+            { data: "P", title: "STUDENTS GENDER" },
+            { data: "X", title: "SCHOOL LEVEL" },
+            {
+                data: "F", title: "ENGLISH ADDRESS",
+                render: function (data, type, row) {
+                    return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.D}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
+                }
+            },
+            { data: "R", title: "SESSION" },
+            { data: "AF", title: "RELIGION" },
+            {
+                data: "AD", title: "WEBSITE",
+                render: function (data, type) {
+                    if (type === 'display') {
+                        if (data.length <= 0) {
+                            return 'No Web Site';
+                        }
+                        else {
+                            return '<a href="' + data + '">' + "Website" + '</a>';
+                        }
+                    }
+                    return data;
+                }
+            }]
+        tableLang = {}
+
+        nearSchCol = [
+            {
+                data: "name-en", title: "NAME",
+                render: function (data, type, row) {
+                    if ("男" == row["student-gender-zh"]) {
+                        return ` <i class="fa-solid fa-child"></i> ${data}`
+                    }
+                    else if ("女" == row["student-gender-zh"]) {
+                        return `<i class="fa-solid fa-child-dress"></i> ${data} `
+                    }
+                    else if ("男女" == row["student-gender-zh"]) {
+                        return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data} `
+                    }
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `<a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-en"]}')">
+                    <i class="fas fa-map-marked-alt"></i>
+                    </a>`
+                }
+            },
+            { data: "district-en", title: "DISTRICT" },
+            { data: "finance-type-en", title: "FINANCE TYPE" },
+            { data: "student-gender-en", title: "GENDER" },
+            {
+                data: "level-en", title: "LEVEL"
+            },
+            {
+                data: "address-en", title: "ADDRESS",
+                render: function (data, type, row) {
+                    return `${data} <a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-en"]}')">
+                    <i class="fas fa-map-marked-alt"></i>
+                    </a>`
+                }
+            },
+            { data: "session-en", title: "SESSION" },
+            { data: "religion-en", title: "RELIGION" },
+            {
+                data: "website", title: "URL",
+                render: function (data, type) {
+                    if (type === 'display') {
+                        if (data.length <= 0) {
+                            return 'No Web Site';
+                        }
+                        else {
+                            return '<a href="' + data + '">' + "Website" + '</a>';
+                        }
+                    }
+                    return data;
+                }
             }
-        }]
-        tableLang = {
-        }
-    }else{
+        ]
+    } else {
         document.getElementById("chineseBtn").className = "nav-link active";
         document.getElementById("englishBtn").className = "nav-link ";
-        document.getElementsByClassName("searchLabel")[0].textContent = "分區:";
-        mainTableCol =  [
+        document.getElementById("nearSchoolbtn").textContent = `附近的學校`;
+        document.getElementById("closeBtn").textContent = "關閉";
+        document.getElementsByClassName("navbar-brand")[0].innerHTML = `<img class="logo" src="https://img.icons8.com/color/452/school-building.png"
+        height="40"> 尋找學校</a>`
+        mainTableCol = [
             {
                 data: "E", title: "名稱",
                 render: function (data, type, row) {
@@ -397,6 +424,60 @@ $(document).ready(function () {
                 "previous": "上一頁"
             },
         }
+        nearSchCol = [
+            {
+                data: "name-zh", title: "名稱",
+                render: function (data, type, row) {
+                    if ("男" == row["student-gender-zh"]) {
+                        return ` <i class="fa-solid fa-child"></i> ${data}`
+                    }
+                    else if ("女" == row["student-gender-zh"]) {
+                        return `<i class="fa-solid fa-child-dress"></i> ${data} `
+                    }
+                    else if ("男女" == row["student-gender-zh"]) {
+                        return ` <i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
+                    }
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `<a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
+                    <i class="fas fa-map-marked-alt"></i>
+                    </a>`
+                }
+            },
+            { data: "district-zh", title: "分區" },
+            { data: "finance-type-zh", title: "資助" },
+            { data: "student-gender-zh", title: "就讀性別" },
+            {
+                data: "level-zh", title: "類型"
+            },
+            {
+                data: "address-zh", title: "地址",
+                render: function (data, type, row) {
+                    return `${data} <a href="#" onclick="moveMap(${row['lat-long'][0]},${row['lat-long'][1]},'${row["name-zh"]}')">
+                    <i class="fas fa-map-marked-alt"></i>
+                    </a>`
+                }
+            },
+            { data: "session-zh", title: "授課時間" },
+            { data: "religion-zh", title: "宗教" },
+            {
+                data: "website", title: "URL",
+                render: function (data, type) {
+                    if (type === 'display') {
+                        if (data.length <= 0) {
+                            return 'No Web Site';
+                        }
+                        else {
+                            return '<a href="' + data + '">' + "Website" + '</a>';
+                        }
+                    }
+                    return data;
+                }
+            }
+        ]
     }
     getData().then(mainTable())
     $(window).scroll(function () {
@@ -410,7 +491,7 @@ $(document).ready(function () {
         $("html, body").animate({ scrollTop: 0 }, 600);
         return false;
     });
-    
+
 });
 
 function mainTable() {
