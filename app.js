@@ -1,5 +1,27 @@
-let file_url, nearSchoolApi, map, layer, marker;
+let file_url, nearSchoolApi, map, layer, marker, mainTableCol,tableLang;
 const file_name = "schoolData";
+
+function changeEn(language) {
+    const localStorage = window.localStorage;
+    if (localStorage) {
+        localStorage.setItem('language', language);
+    }
+    document.getElementById("chineseBtn").className = "nav-link";
+    document.getElementById("englishBtn").className = "nav-link active";
+    location.reload()
+}
+
+function changeZh(language) {
+    const localStorage = window.localStorage;
+    if (localStorage) {
+        localStorage.setItem('language', language);
+    }
+    document.getElementById("chineseBtn").className = "nav-link active";
+    document.getElementById("englishBtn").className = "nav-link ";
+    location.reload()
+}
+let language = localStorage.getItem("language")
+
 
 window.onscroll = function () {
     scrollFunction();
@@ -84,19 +106,20 @@ async function fetchNearSchoolMap() {
             selector: 'td:nth-child(2)'
         },
         rowReorder: false,
+        "language": tableLang,
         responsive: true,
         data: data["results"],
         "columns": [
-            { 
+            {
                 data: "name-zh", title: "名稱", width: "100%",
                 render: function (data, type, row) {
-                    if("男" == row["student-gender-zh"]){
+                    if ("男" == row["student-gender-zh"]) {
                         return `<i class="fa-solid fa-child"></i> ${data}`
                     }
-                    else if("女" == row["student-gender-zh"]){
+                    else if ("女" == row["student-gender-zh"]) {
                         return `<i class="fa-solid fa-child-dress"></i> ${data}`
                     }
-                    else if ("男女" == row["student-gender-zh"]){
+                    else if ("男女" == row["student-gender-zh"]) {
                         return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
                     }
                 }
@@ -264,132 +287,118 @@ if (!navigator.onLine) {
 }
 
 $(document).ready(function () {
-    getData().then(function () {
-        console.log("[DataTable] loading dataTable")
-        $('#originalTable').dataTable({
-            "pagingType": "simple",
-            "autoWidth": false,
-            "language": {
-                "lengthMenu": "每頁顯示 _MENU_ 條",
-                "zeroRecords": "沒有資料",
-                "info": "顯示第 _PAGE_ 頁，共 _PAGES_ 頁",
-                "infoEmpty": "沒有可用的記錄",
-                "infoFiltered": "(從 _MAX_ 條記錄中過濾)",
-                "processing": "處理中...",
-                "loadingRecords": "正在加載...",
-                "search": "搜尋",
-                "paginate": {   
-                    "next": "下一頁",
-                    "previous": "上一頁"
-                },
-            },
-            rowReorder: {
-                selector: 'td:nth-child(2)'
-            },
-            rowReorder: false,
-            responsive: true,
-            columnDefs: [
-                { responsivePriority: 1, targets: 0 },
-                { responsivePriority: 2, targets: -1 }
-            ],
-            "deferRender": true,
-            ajax: file_url,
-            initComplete: function () {
-                var filter_cols = [1, 2, 7, 4, 6, 3]
-                filter_cols.forEach(col => {
-                    this.api().columns(col).every(function () {
-                        var column = this;
-                        var select = $('<select  class="form-select" aria-label="Default select" style="width:100%; padding: 2px;"><option value=""></option></select>')
-                            .appendTo($("#mobile-filter" + col))
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    });
-                });
-            },
-            "columns": [
-                { 
-                    data: "E", title: "名稱",
-                    render: function (data, type, row) {
-                        if("男" == row.Q){
-                            return `<i class="fa-solid fa-child"></i> ${data}`
-                        }
-                        else if("女" == row.Q){
-                            return `<i class="fa-solid fa-child-dress"></i> ${data}`
-                        }
-                        else if ("男女" == row.Q){
-                            return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
-                        }else{
-                            return `${data}`
-                        }
+    if(language == 'en'){
+        document.getElementById("chineseBtn").className = "nav-link";
+        document.getElementById("englishBtn").className = "nav-link active";
+        document.getElementsByClassName("searchLabel")[0].textContent = "DISTRICT:";
+        mainTableCol =[{
+            data: "D", title: "NAME",
+            render: function (data, type, row) {
+                if ("男" == row.Q) {
+                    return `<i class="fa-solid fa-child"></i> ${data}`
+                }
+                else if ("女" == row.Q) {
+                    return `<i class="fa-solid fa-child-dress"></i> ${data}`
+                }
+                else if ("男女" == row.Q) {
+                    return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
+                } else {
+                    return `${data}`
+                }
+            }
+        },
+        { data: "T", title: "DISTRICT" },
+        { data: "V", title: "FINANCE TYPE" },
+        { data: "P", title: "STUDENTS GENDER" },
+        { data: "X", title: "SCHOOL LEVEL" },
+        {
+            data: "F", title: "ENGLISH ADDRESS",
+            render: function (data, type, row) {
+                return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.D}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
+            }
+        },
+        { data: "R", title: "SESSION" },
+        { data: "AF", title: "RELIGION" },
+        {
+            data: "AD", title: "WEBSITE",
+            render: function (data, type) {
+                if (type === 'display') {
+                    if (data.length <= 0) {
+                        return 'No Web Site';
                     }
-                },
-                { data: "U", title: "分區" },
-                { data: "W", title: "資助種類" },
-                { data: "Q", title: "就讀性別" },
-                { data: "Y", title: "類型" },
-                {
-                    data: "G", title: "地址",
-                    render: function (data, type, row) {
-                        return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.E}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
-                    }
-                },
-                { data: "S", title: "授課時間" },
-                { data: "AG", title: "宗教" },
-                {
-                    data: "AE", title: "URL",
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (data.length <= 0) {
-                                return 'No Web Site';
-                            }
-                            else {
-                                return '<a href="' + data + '">' + "Website" + '</a>';
-                            }
-                        }
-                        return data;
+                    else {
+                        return '<a href="' + data + '">' + "Website" + '</a>';
                     }
                 }
-            ],
-            "columnDefs": [
-                {
-                    targets: [1],
-                    className: 'none',
-                },
-                {
-                    targets: [3],
-                    className: 'none',
-                },
-                {
-                    targets: [4],
-                    className: 'none',
-                },
-                {
-                    targets: [5],
-                    className: 'none',
-                },
-                {
-                    targets: [7],
-                    className: 'none',
-                },
-                {
-                    targets: [8],
-                    className: 'none',
+                return data;
+            }
+        }]
+        tableLang = {
+        }
+    }else{
+        document.getElementById("chineseBtn").className = "nav-link active";
+        document.getElementById("englishBtn").className = "nav-link ";
+        document.getElementsByClassName("searchLabel")[0].textContent = "分區:";
+        mainTableCol =  [
+            {
+                data: "E", title: "名稱",
+                render: function (data, type, row) {
+                    if ("男" == row.Q) {
+                        return `<i class="fa-solid fa-child"></i> ${data}`
+                    }
+                    else if ("女" == row.Q) {
+                        return `<i class="fa-solid fa-child-dress"></i> ${data}`
+                    }
+                    else if ("男女" == row.Q) {
+                        return `<i class="fa-solid fa-child-dress"></i><i class="fa-solid fa-child"></i> ${data}`
+                    } else {
+                        return `${data}`
+                    }
                 }
-            ]
-        })
-        $("html, body").animate({ scrollTop: 0 }, 600); 
-    })
+            },
+            { data: "U", title: "分區" },
+            { data: "W", title: "資助種類" },
+            { data: "Q", title: "就讀性別" },
+            { data: "Y", title: "類型" },
+            {
+                data: "G", title: "地址",
+                render: function (data, type, row) {
+                    return `${data} <button class="btn btn-primary btn-open-modal" data-toggle="modal" data-target="#modal-fullscreen-sm" id="mapButton" value="${row.E}" onclick=createMap(${row.K},${row.I},this.value)><i class="fas fa-map-marked-alt"></i></button>`
+                }
+            },
+            { data: "S", title: "授課時間" },
+            { data: "AG", title: "宗教" },
+            {
+                data: "AE", title: "URL",
+                render: function (data, type) {
+                    if (type === 'display') {
+                        if (data.length <= 0) {
+                            return 'No Web Site';
+                        }
+                        else {
+                            return '<a href="' + data + '">' + "Website" + '</a>';
+                        }
+                    }
+                    return data;
+                }
+            }
+        ]
+        tableLang = {
+            "lengthMenu": "每頁顯示 _MENU_ 條",
+            "zeroRecords": "沒有資料",
+            "info": "顯示第 _PAGE_ 頁，共 _PAGES_ 頁",
+            "infoEmpty": "沒有可用的記錄",
+            "infoFiltered": "(從 _MAX_ 條記錄中過濾)",
+            "processing": "處理中...",
+            "loadingRecords": "正在加載...",
+            "search": "搜尋",
+            "paginate": {
+                "next": "下一頁",
+                "previous": "上一頁"
+            },
+        }
+    }
+    getData().then(mainTable())
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
             $('#scroll').fadeIn();
@@ -401,6 +410,76 @@ $(document).ready(function () {
         $("html, body").animate({ scrollTop: 0 }, 600);
         return false;
     });
-
+    
 });
 
+function mainTable() {
+    console.log("[DataTable] loading dataTable")
+    $('#originalTable').dataTable({
+        "pagingType": "simple",
+        "autoWidth": false,
+        "language": tableLang,
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+        rowReorder: false,
+        responsive: true,
+        columnDefs: [
+            { responsivePriority: 1, targets: 0 },
+            { responsivePriority: 2, targets: -1 }
+        ],
+        "deferRender": true,
+        ajax: file_url,
+        initComplete: function () {
+            var filter_cols = [1, 2, 7, 4, 6, 3]
+            filter_cols.forEach(col => {
+                this.api().columns(col).every(function () {
+                    var column = this;
+                    var select = $('<select  class="form-select" aria-label="Default select" style="width:100%; padding: 2px;"><option value=""></option></select>')
+                        .appendTo($("#mobile-filter" + col))
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            });
+        },
+        "columns": mainTableCol,
+        "columnDefs": [
+            {
+                targets: [1],
+                className: 'none',
+            },
+            {
+                targets: [3],
+                className: 'none',
+            },
+            {
+                targets: [4],
+                className: 'none',
+            },
+            {
+                targets: [5],
+                className: 'none',
+            },
+            {
+                targets: [7],
+                className: 'none',
+            },
+            {
+                targets: [8],
+                className: 'none',
+            }
+        ]
+    })
+    $("html, body").animate({ scrollTop: 0 }, 600);
+}
