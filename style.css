@@ -1,3 +1,8 @@
+@media (max-width: 768px) {
+  #btn-back-to-top {
+    display: none;
+  }
+}
 .mobile-filters {
   display: inline;
   padding: 100px;
