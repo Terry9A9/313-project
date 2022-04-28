@@ -185,7 +185,7 @@ function createMap(lat, long, name) {
     map = new L.map('map', mapOptions);
     // Creating a Layer object
 
-    layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19
     });
     // Adding layer to the map
