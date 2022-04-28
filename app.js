@@ -8,7 +8,7 @@ function changeEn(language) {
     }
     document.getElementById("chineseBtn").className = "nav-link";
     document.getElementById("englishBtn").className = "nav-link active";
-    location.reload()
+    location.reload();
 }
 
 function changeZh(language) {
@@ -18,7 +18,7 @@ function changeZh(language) {
     }
     document.getElementById("chineseBtn").className = "nav-link active";
     document.getElementById("englishBtn").className = "nav-link ";
-    location.reload()
+    location.reload();
 }
 
 const language = localStorage.getItem("language")
@@ -46,7 +46,12 @@ function backToTop() {
 async function fetchNearSchoolMap() {
 
     var org = document.getElementById("nearSchoolbtn").innerHTML
-    document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+    if(language == "en"){
+        document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+    }else{
+        document.getElementById("nearSchoolbtn").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 載入中...'
+    }
+    
     const response = await fetch(nearSchoolApi);
     let data = await response.json();
     console.log(data)
