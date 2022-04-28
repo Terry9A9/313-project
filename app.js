@@ -198,8 +198,13 @@ function createMap(lat, long, name) {
 
     } else {
         document.getElementById("nearSchoolbtn").disabled = true
-        html = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
-        document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", html)
+        if(language = "en"){
+            networkHtml = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
+        }else{
+            networkHtml = "<div><br/><p>您當前處於離線狀態，地圖功能已禁用</p></div>"
+        }
+        
+        document.getElementsByClassName("modal-body")[0].insertAdjacentHTML("beforeend", networkHtml)
     }
     // document.getElementById("nearSchoolbtn").textContent = `附近的學校`
     nearSchoolApi = `https://api.data.gov.hk/v1/nearest-schools?lat=${lat}&long=${long}&max=10`
