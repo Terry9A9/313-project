@@ -21,7 +21,7 @@ function changeZh(language) {
     location.reload();
 }
 
-const language = localStorage.getItem("language")
+let language = localStorage.getItem("language")
 
 window.onscroll = function () {
     scrollFunction();
@@ -203,7 +203,9 @@ function createMap(lat, long, name) {
 
     } else {
         document.getElementById("nearSchoolbtn").disabled = true
-        if(language = "en"){
+        var networkHtml
+
+        if(language == "en"){
             networkHtml = "<div><br/><p>You are currently offline, Map function is disabled</p></div>"
         }else{
             networkHtml = "<div><br/><p>您當前處於離線狀態，地圖功能已禁用</p></div>"
